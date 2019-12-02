@@ -1,18 +1,18 @@
 window.onload = function(){
     
 	// Event listeners
-	document.getElementById('game').addEventListener('click', function(e) {
+	canvas.addEventListener('click', function(e) {
 		var pos = getCoordinates(e.pageX, e.pageY);
 		mouseState.click = [pos[0], pos[1], 1];
     });
     
-	document.getElementById('game').addEventListener('mousemove', function(e) {
+	canvas.addEventListener('mousemove', function(e) {
 		var pos = getCoordinates(e.pageX, e.pageY);
 		mouseState.x = pos[0];
 		mouseState.y = pos[1];
 	});
 	
-	document.getElementById('game').addEventListener('contextmenu', function(e) {
+	canvas.addEventListener('contextmenu', function(e) {
 		e.preventDefault();
 		var pos = getCoordinates(e.pageX, e.pageY);
 		mouseState.click = [pos[0], pos[1], 2];
@@ -55,10 +55,12 @@ function startLevel(level){
 	gameState.screen	    = 'playing';	
 
 	var currentLevel = levels[level];
-    
+    canvas.width = currentLevel.numCols*gameState.cellWidth + 100;
+	canvas.height = currentLevel.numRows*gameState.cellHeight + 100;
+
     // Calculate the start position of the game board
-	offsetX = Math.floor((document.getElementById('game').width - (currentLevel.numCols * gameState.cellWidth)) / 2);
-	offsetY = Math.floor((document.getElementById('game').height - (currentLevel.numRows * gameState.cellHeight)) / 2);
+	offsetX = Math.floor((canvas.width - (currentLevel.numCols * gameState.cellWidth)) / 2);
+	offsetY = Math.floor((canvas.height - (currentLevel.numRows * gameState.cellHeight)) / 2);
     
     // Creat and add cells to grid
 	for(var j = 0; j < currentLevel.numRows; j++){
@@ -154,8 +156,9 @@ function drawMenu(){
 	ctx.font = "bold 20pt sans-serif";
 	ctx.fillStyle = "#000000";
 	
-	var y = 100;
-	
+	var y = canvas.height/3 - 20;
+
+	console.log(y);
 	for(var d in levels){
 
 		var mouseOver = (mouseState.y>=(y-20) && mouseState.y<=(y+10));
@@ -173,26 +176,26 @@ function drawMenu(){
 		}
 	}
 	
-	var y = 120;
-	ctx.font = "italic 12pt sans-serif";
+	// var y = 120;
+	// ctx.font = "italic 12pt sans-serif";
 	
-	for(var d in levels){
+	// for(var d in levels){
 
-		if(levels[d].bestTime==0){
-			ctx.fillText("No best time", 150, y);
-		}
-		else{
-			var t = levels[d].bestTime;
-			var bestTime = "";
-			if( (t/1000) >= 60 ){
-				bestTime = Math.floor( (t/1000)/60 ) + ":";
-				t = t % (60000);
-			}
-			bestTime += Math.floor(t/1000) + ":" + (t%1000);
-			ctx.fillText("Best time   " + bestTime, 150, y);
-		}
-		y+= 80;
-	}
+	// 	if(levels[d].bestTime==0){
+	// 		ctx.fillText("No best time", 150, y);
+	// 	}
+	// 	else{
+	// 		var t = levels[d].bestTime;
+	// 		var bestTime = "";
+	// 		if( (t/1000) >= 60 ){
+	// 			bestTime = Math.floor( (t/1000)/60 ) + ":";
+	// 			t = t % (60000);
+	// 		}
+	// 		bestTime += Math.floor(t/1000) + ":" + (t%1000);
+	// 		ctx.fillText("Best time   " + bestTime, 150, y);
+	// 	}
+	// 	y+= 80;
+	// }
 }
 
 // Function to draw play game state
@@ -254,7 +257,7 @@ function drawPlaying(){
 			ctx.fillText("x", px + halfCellWidth, py + halfCellHeight);
 		}
 		else if(grid[i].currentState == 'visible'){ // display number of mines in neighbouring cells
-			ctx.fillStyle = "#dddddd";
+			ctx.fillStyle = "#ff0000";
 			if(grid[i].numMines){
 				ctx.fillStyle = "#000000";
 				ctx.fillText(grid[i].numMines, px + halfCellWidth, py + halfCellHeight);
@@ -266,7 +269,7 @@ function drawPlaying(){
 			ctx.strokeRect(px, py, gameState.cellWidth, gameState.cellHeight);
 			if(grid[i].currentState == 'flagged'){
 				ctx.fillStyle = "#0000cc";
-				ctx.fillText("FF", px + halfCellWidth, py + halfCellHeight);
+				ctx.fillText("F", px + halfCellWidth, py + halfCellHeight);
 			}
 		}
 	}
@@ -300,7 +303,7 @@ function drawGame(){
 	}
 	
 	// Clear canvas
-	ctx.fillStyle = "#0c1c80";
+	ctx.fillStyle = "#b8e7fe";
 	ctx.fillRect(0, 0, 800, 600);
 	
 	if(gameState.screen == 'menu'){ 
@@ -323,7 +326,7 @@ function drawGame(){
 // Function to obtain the mouse position
 function getCoordinates(x, y){
 
-	var canvasElement = document.getElementById('game');	
+	var canvasElement = canvas;	
 	do {
 		x -= canvasElement.offsetLeft;
 		y -= canvasElement.offsetTop;

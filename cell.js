@@ -1,7 +1,7 @@
 
 // GridCell Class
 
-class cell{
+class Cell{
 
     // Constructor of cell class
     constructor(x, y){
@@ -61,7 +61,7 @@ class cell{
 
         else{ // empty cell (numMines == 0)
             this.currentState = 'visible'; // update current state
-            this.revealNeighbours();
+            this.showNeighbours();
         }
         
         checkState(); // check for game won

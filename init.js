@@ -29,8 +29,8 @@ var levels = {
 
 	easy: {
 		name		: "Easy",   // type
-		numCols		: 10,       // total number of columns
-		numRows		: 10,       // total number of rows
+		numCols		: 9,       // total number of columns
+		numRows		: 9,       // total number of rows
 		mines		: 10,       // number of mines
 		bestTime	: 0,        // high score
 		menuBox		: [0,0]     // position of levels on the menu
@@ -38,20 +38,29 @@ var levels = {
     
     medium: {
 		name		: "Medium", // type
-		numCols		: 12,       // total number of columns
-		numRows		: 12,       // total number of rows
-		mines		: 20,       // number of mines
+		numCols		: 16,       // total number of columns
+		numRows		: 16,       // total number of rows
+		mines		: 40,       // number of mines
 		bestTime	: 0,        // high score
 		menuBox		: [0,0]
 	},
     
     hard: {
 		name		: "Hard",   // type
-		numCols		: 15,       // total number of columns
-		numRows		: 15,       // total number of rows
-		mines		: 50,       // number of mines
+		numCols		: 30,       // total number of columns
+		numRows		: 16,       // total number of rows
+		mines		: 99,       // number of mines
 		bestTime	: 0,        // high score
 		menuBox		: [0,0]
 	}
 };
 
+var currentLevel = levels[gameState.level];
+console.log(currentLevel.numCols);
+console.log(gameState.cellWidth);
+
+canvas.width = currentLevel.numCols*gameState.cellWidth + 100;
+canvas.height = currentLevel.numRows*gameState.cellHeight + 100;
+
+
+console.log(canvas.width);

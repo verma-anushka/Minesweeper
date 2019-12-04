@@ -153,26 +153,26 @@ function updateGame(){
 function drawMenu(){
 
 	ctx.textAlign = 'center';
-	ctx.font = "bold 20pt sans-serif";
-	ctx.fillStyle = "#000000";
+	ctx.font = "bold 24pt sans-serif";
+	ctx.fillStyle = "#FFFFFF";
 	
-	var y = canvas.height/3 - 20;
+	var y = canvas.height/3 - 25;
 
 	console.log(y);
 	for(var d in levels){
 
-		var mouseOver = (mouseState.y>=(y-20) && mouseState.y<=(y+10));
+		var mouseOver = (mouseState.y>=(y-10) && mouseState.y<=(y+10));
 		
 		if(mouseOver){ 
-			ctx.fillStyle = "#000099"; 
+			ctx.fillStyle = "#0000EE"; 
 		}
 		
 		levels[d].menuBox = [y-20, y+10];
 		ctx.fillText(levels[d].name, 150, y);
-		y+= 80;
+		y+= 70;
 		
 		if(mouseOver){ 
-			ctx.fillStyle = "#000000"; 
+			ctx.fillStyle = "#FFFFFF"; 
 		}
 	}
 	
@@ -209,16 +209,24 @@ function drawPlaying(){
 	ctx.textAlign = "center";
 	ctx.textBaseline = "bottom";
 	
-	ctx.fillStyle = "#000000";
-	ctx.font = "12px sans-serif";
-	ctx.fillText(currentLevel.name, 150, 20);
+	ctx.fillStyle = "#FFFFFF";
+	ctx.font = "18px sans-serif";
+	ctx.shadowBlur = 0;
+	ctx.fillText(currentLevel.name, canvas.width/2, 20);
 	
-	ctx.fillText("Return to menu", 150, 390);
+	ctx.fillText("Return to menu", canvas.width/2, canvas.height-20);
 	
 	if(gameState.screen != 'lost'){
 
+		ctx.beginPath();
+		ctx.rect(50, 20, 70, 35);
+		ctx.fillStyle = '#DDD';
+		ctx.shadowColor = '#999';
+		ctx.fill();
+		ctx.fillStyle = '#000';
 		ctx.textAlign = "left";
-		ctx.fillText("Mines: " + currentLevel.mines, 10, 40);
+		ctx.fillText(currentLevel.mines, 50, 40);
+		ctx.closePath();
 	
 		var whichT = (gameState.screen == 'won' ? gameState.timeTaken : time);
 		var t = '';
@@ -228,21 +236,32 @@ function drawPlaying(){
 		var s = Math.floor((whichT / 1000) % 60);
 		t += (s > 9 ? s : '0' + s);
 	
+		// ctx.textAlign = "right";
+		// ctx.fillText("Time: " + t, canvas.width - 50, 40);
+
+		ctx.beginPath();
+		ctx.rect(canvas.width - 120, 20, 70, 35);
+		ctx.fillStyle = '#DDD';
+		ctx.shadowColor = '#999';
+		ctx.fill();
+		ctx.fillStyle = '#000';
 		ctx.textAlign = "right";
-		ctx.fillText("Time: " + t, 290, 40);
+		ctx.fillText(t, canvas.width - 50, 40);
+		ctx.closePath();
 	}
 	
 	if(gameState.screen == 'lost' || gameState.screen == 'won'){ // display game over message
 		ctx.textAlign = "center";
 		ctx.font = "bold 20px sans-serif";
+		ctx.shadowBlur = 0;
 		ctx.fillText(
-			(gameState.screen == 'lost' ? "Game Over" : "Cleared!"), 150, offsetY - 15);
+			(gameState.screen == 'lost' ? "Game Over" : "Cleared!"), canvas.width/2, offsetY - 5);
 	}
 	
 	ctx.strokeStyle = "#999999";
 	ctx.strokeRect(offsetX, offsetY, (currentLevel.numCols * gameState.cellWidth), (currentLevel.numRows * gameState.cellHeight));
 	
-	ctx.font = "bold 10px monospace";
+	ctx.font = "bold 14px monospace";
 	ctx.textAlign = "center";
 	ctx.textBaseline = "middle";
 	
@@ -258,6 +277,7 @@ function drawPlaying(){
 		}
 		else if(grid[i].currentState == 'visible'){ // display number of mines in neighbouring cells
 			ctx.fillStyle = "#ff0000";
+			// ctx.shadowBlur = 2;
 			if(grid[i].numMines){
 				ctx.fillStyle = "#000000";
 				ctx.fillText(grid[i].numMines, px + halfCellWidth, py + halfCellHeight);
@@ -265,6 +285,7 @@ function drawPlaying(){
 		}
 		else{ // display flag
 			ctx.fillStyle = "#cccccc";
+			// ctx.shadowBlur = 0;
 			ctx.fillRect(px, py, gameState.cellWidth, gameState.cellHeight);
 			ctx.strokeRect(px, py, gameState.cellWidth, gameState.cellHeight);
 			if(grid[i].currentState == 'flagged'){
@@ -303,7 +324,7 @@ function drawGame(){
 	}
 	
 	// Clear canvas
-	ctx.fillStyle = "#b8e7fe";
+	ctx.fillStyle = "transparent";
 	ctx.fillRect(0, 0, 800, 600);
 	
 	if(gameState.screen == 'menu'){ 

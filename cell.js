@@ -9,9 +9,38 @@ class Cell{
         this.y			    = y;        // y-coordinate of the cell (px)
         this.hasMine	    = false;    // whether the cell has a mine (boolean)
         this.numMines	    = 0;        // number of mines in the immediate neighbours
+        this.colorMines	    = '#000';   // color of the number of mines in the immediate neighbours
         this.currentState	= 'hidden'; // current state of the cell
     };
     
+    // Method to get the color of the number of mines present in the immediate neighbours of the cell
+    getMinesColor(num) {
+
+        switch(num){
+            
+            case 1  : 	this.color = "#0000ff";
+        				break;
+            case 2  : 	this.color = "#008100";
+        				break;
+            case 3  : 	this.color = "#ff1300";
+        				break;
+        	case 4  : 	this.color = "#000083";
+        				break;
+        	case 5  : 	this.color = "#810500";
+        				break;
+        	case 6  : 	this.color = "#2a9494";
+                        break;
+            case 7  : 	this.color = "#000000";
+        				break;
+        	case 8  : 	this.color = "#808080";
+                        break;
+            default :   this.color = "#000000";
+                        break;
+        }
+        return this.color;  
+
+    }
+
     // Method to calculate the number of mines present in the immediate neighbours of the cell
     getNumMines() {
         

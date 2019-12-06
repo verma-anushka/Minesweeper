@@ -62,7 +62,7 @@ function startLevel(level){
 	offsetX = Math.floor((canvas.width - (currentLevel.numCols * gameState.cellWidth)) / 2);
 	offsetY = Math.floor((canvas.height - (currentLevel.numRows * gameState.cellHeight)) / 2);
     
-    // Creat and add cells to grid
+    // Create and add cells to grid
 	for(var j = 0; j < currentLevel.numRows; j++){
 		for(var i = 0; i < currentLevel.numCols; i++){
 			var idx = ((j * currentLevel.numCols) + i);
@@ -123,10 +123,10 @@ function updateGame(){
 			var currentLevel = levels[gameState.level];
 			
 			// game board click 
-			if(mouseState.click[0]>=offsetX &&
-				mouseState.click[1]>=offsetY &&
-				mouseState.click[0]<(offsetX + (currentLevel.numCols * gameState.cellWidth)) &&
-				mouseState.click[1]<(offsetY + (currentLevel.numRows * gameState.cellHeight))
+			if(mouseState.click[0] >= offsetX &&
+				mouseState.click[1] >= offsetY &&
+				mouseState.click[0] < (offsetX + (currentLevel.numCols * gameState.cellWidth)) &&
+				mouseState.click[1] < (offsetY + (currentLevel.numRows * gameState.cellHeight))
 			){
 				var cell = [ // position of selected cell
 					Math.floor((mouseState.click[0]-offsetX)/gameState.cellWidth),
@@ -140,7 +140,7 @@ function updateGame(){
 					grid[((cell[1] * currentLevel.numCols) + cell[0])].flag(); // display flag
 				}
 
-			}else if(mouseState.click[1]>=380){ // return to menu screen
+			}else if(mouseState.click[1] >= canvas.height - 35 ){ // return to menu screen
 				gameState.screen = 'menu';
 			}
 			
@@ -152,49 +152,30 @@ function updateGame(){
 // Function to draw menu screen
 function drawMenu(){
 
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	canvas.style.opacity = "1";
+
 	ctx.textAlign = 'center';
 	ctx.font = "bold 24pt sans-serif";
-	ctx.fillStyle = "#FFFFFF";
+	ctx.fillStyle = "#FFF";
 	
 	var y = canvas.height/3 - 25;
 
 	for(var d in levels){
 
-		var mouseOver = (mouseState.y>=(y-10) && mouseState.y<=(y+10));
-		
+		var mouseOver = (mouseState.y >= (y-20) && mouseState.y <= (y+10));
 		if(mouseOver){ 
-			ctx.fillStyle = "#0000EE"; 
+			ctx.fillStyle = "#001"; 
 		}
 		
 		levels[d].menuBox = [y-20, y+10];
-		ctx.fillText(levels[d].name, 150, y);
+		ctx.fillText(levels[d].name, canvas.width/2, y);
 		y+= 70;
 		
 		if(mouseOver){ 
-			ctx.fillStyle = "#FFFFFF"; 
+			ctx.fillStyle = "#FFF"; 
 		}
 	}
-	
-	// var y = 120;
-	// ctx.font = "italic 12pt sans-serif";
-	
-	// for(var d in levels){
-
-	// 	if(levels[d].bestTime==0){
-	// 		ctx.fillText("No best time", 150, y);
-	// 	}
-	// 	else{
-	// 		var t = levels[d].bestTime;
-	// 		var bestTime = "";
-	// 		if( (t/1000) >= 60 ){
-	// 			bestTime = Math.floor( (t/1000)/60 ) + ":";
-	// 			t = t % (60000);
-	// 		}
-	// 		bestTime += Math.floor(t/1000) + ":" + (t%1000);
-	// 		ctx.fillText("Best time   " + bestTime, 150, y);
-	// 	}
-	// 	y+= 80;
-	// }
 }
 
 // Function to draw play game state
@@ -202,22 +183,18 @@ function drawPlaying(){
 
 	var halfCellWidth = gameState.cellWidth / 2;
 	var halfCellHeight = gameState.cellHeight / 2;
-	
 	var currentLevel = levels[gameState.level];
 	
 	ctx.textAlign = "center";
 	ctx.textBaseline = "bottom";
-	
 	ctx.fillStyle = "#FFFFFF";
 	ctx.font = "18px sans-serif";
-	ctx.shadowBlur = 0;
 	ctx.fillText(currentLevel.name, canvas.width/2, 20);
-	
-	ctx.fillText("Return to menu", canvas.width/2, canvas.height-20);
+	ctx.fillText("Difficulty", canvas.width/2, canvas.height-10);
 	
 	if(gameState.screen != 'lost'){
 
-		// Draw total ,ines box
+		// Draw total mines box
 		ctx.beginPath();
 		ctx.rect(50, 20, 55, 35);
 		ctx.fillStyle = '#DDD';
@@ -250,15 +227,7 @@ function drawPlaying(){
 		ctx.closePath();
 	}
 	
-	if(gameState.screen == 'lost' || gameState.screen == 'won'){ // display game over message
-		ctx.textAlign = "center";
-		ctx.font = "bold 20px sans-serif";
-		ctx.shadowBlur = 0;
-		ctx.fillText(
-			(gameState.screen == 'lost' ? "Game Over" : "Cleared!"), canvas.width/2, offsetY - 5);
-	}
-	
-	ctx.strokeStyle = "#999999";
+	ctx.strokeStyle = "#999";
 	ctx.strokeRect(offsetX, offsetY, (currentLevel.numCols * gameState.cellWidth), (currentLevel.numRows * gameState.cellHeight));
 	
 	ctx.font = "bold 14px monospace";
@@ -270,32 +239,42 @@ function drawPlaying(){
 		var py = offsetY + (grid[i].y * gameState.cellHeight);
 		
 		if(gameState.screen == 'lost' && grid[i].hasMine){ // display mine
-			ctx.drawImage(mine, px, py, 18, 18); 
-			// ctx.fillStyle = "#ff0000";
-			// ctx.fillRect(px, py, gameState.cellWidth, gameState.cellHeight);
-			// ctx.fillStyle = "#000000";
-			// ctx.fillText("x", px + halfCellWidth, py + halfCellHeight);
+			ctx.drawImage(mine, px + 1, py + 1, gameState.cellWidth - 2, gameState.cellHeight - 2); 
 		}
 		else if(grid[i].currentState == 'visible'){ // display number of mines in neighbouring cells
-			ctx.fillStyle = "#ff0000";
-			// ctx.shadowBlur = 2;
+
+			// console.log(grid[i].colorMines);
+			ctx.beginPath();
+			ctx.rect(px, py, gameState.cellWidth, gameState.cellHeight);
+			ctx.fillStyle = '#DDD';
+			// ctx.shadowColor = '#999';
+			ctx.fill();
+			ctx.strokeStyle = "#999";
+			ctx.strokeRect(px, py, gameState.cellWidth, gameState.cellHeight);
+			ctx.closePath();
 			if(grid[i].numMines){
-				ctx.fillStyle = "#000000";
+				ctx.font = "bold 18px monospace";
+				ctx.fillStyle = grid[i].getMinesColor(grid[i].numMines);
 				ctx.fillText(grid[i].numMines, px + halfCellWidth, py + halfCellHeight);
 			}
 		}
 		else{ 
-			ctx.drawImage(cell, px, py, 20, 20);
-			// ctx.fillStyle = "#cccccc";
-			// // ctx.shadowBlur = 0;
-			// ctx.fillRect(px, py, gameState.cellWidth, gameState.cellHeight);
-			// ctx.strokeRect(px, py, gameState.cellWidth, gameState.cellHeight);
+			ctx.drawImage(cell, px, py, 20, 20); // display cell
 			if(grid[i].currentState == 'flagged'){ // display flag
-				ctx.drawImage(flag, px, py, 20, 20); 
-				// ctx.fillStyle = "#0000cc";
-				// ctx.fillText("F", px + halfCellWidth, py + halfCellHeight);
+				ctx.drawImage(flag, px, py, gameState.cellWidth, gameState.cellHeight); 
 			}
 		}
+	}
+
+	if(gameState.screen == 'lost' || gameState.screen == 'won'){ // display game over message
+
+		ctx.rect(offsetX, offsetY, (currentLevel.numCols * gameState.cellWidth), (currentLevel.numRows * gameState.cellHeight));
+		ctx.fillStyle = 'rgba(255,255,255,0.3)';
+		ctx.fill();
+		ctx.textAlign = "center";
+		ctx.fillStyle = '#000';
+		ctx.font = "bold 48px sans-serif";
+		ctx.fillText( (gameState.screen == 'lost' ? "Game Over!" : "Cleared!"), canvas.width/2, canvas.height/2 );
 	}
 }
 
@@ -337,12 +316,6 @@ function drawGame(){
 		drawPlaying(); 
 	}
 	
-	// // Draw the frame count
-	// ctx.textAlign = "left";
-	// ctx.font = "10pt sans-serif";
-	// ctx.fillStyle = "#000000";
-	// ctx.fillText("Frames: " + framesLastSecond, 5, 15);
-	
 	lastFrameTime = currentFrameTime; // update the lastFrameTime
 	requestAnimationFrame(drawGame); // recursive call
 }
@@ -360,7 +333,7 @@ function getCoordinates(x, y){
 	return [x, y];
 }
 
-// Game Over
+// Function for game Over
 function gameOver(){
 	gameState.screen = 'lost';
 }

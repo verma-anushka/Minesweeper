@@ -158,7 +158,6 @@ function drawMenu(){
 	
 	var y = canvas.height/3 - 25;
 
-	console.log(y);
 	for(var d in levels){
 
 		var mouseOver = (mouseState.y>=(y-10) && mouseState.y<=(y+10));
@@ -218,14 +217,16 @@ function drawPlaying(){
 	
 	if(gameState.screen != 'lost'){
 
+		// Draw total ,ines box
 		ctx.beginPath();
-		ctx.rect(50, 20, 70, 35);
+		ctx.rect(50, 20, 55, 35);
 		ctx.fillStyle = '#DDD';
 		ctx.shadowColor = '#999';
 		ctx.fill();
 		ctx.fillStyle = '#000';
 		ctx.textAlign = "left";
-		ctx.fillText(currentLevel.mines, 50, 40);
+		ctx.drawImage(mine, 55, 25, 20, 20); 
+		ctx.fillText(currentLevel.mines, 80, 45);
 		ctx.closePath();
 	
 		var whichT = (gameState.screen == 'won' ? gameState.timeTaken : time);
@@ -235,18 +236,17 @@ function drawPlaying(){
 		}
 		var s = Math.floor((whichT / 1000) % 60);
 		t += (s > 9 ? s : '0' + s);
-	
-		// ctx.textAlign = "right";
-		// ctx.fillText("Time: " + t, canvas.width - 50, 40);
 
+		// Draw time box
 		ctx.beginPath();
-		ctx.rect(canvas.width - 120, 20, 70, 35);
+		ctx.rect(canvas.width - 122, 20, 72, 35);
 		ctx.fillStyle = '#DDD';
 		ctx.shadowColor = '#999';
 		ctx.fill();
+		ctx.drawImage(clock, canvas.width - 117, 25, 20, 20); 
 		ctx.fillStyle = '#000';
 		ctx.textAlign = "right";
-		ctx.fillText(t, canvas.width - 50, 40);
+		ctx.fillText(t, canvas.width - 55, 45);
 		ctx.closePath();
 	}
 	
@@ -270,10 +270,11 @@ function drawPlaying(){
 		var py = offsetY + (grid[i].y * gameState.cellHeight);
 		
 		if(gameState.screen == 'lost' && grid[i].hasMine){ // display mine
-			ctx.fillStyle = "#ff0000";
-			ctx.fillRect(px, py, gameState.cellWidth, gameState.cellHeight);
-			ctx.fillStyle = "#000000";
-			ctx.fillText("x", px + halfCellWidth, py + halfCellHeight);
+			ctx.drawImage(mine, px, py, 18, 18); 
+			// ctx.fillStyle = "#ff0000";
+			// ctx.fillRect(px, py, gameState.cellWidth, gameState.cellHeight);
+			// ctx.fillStyle = "#000000";
+			// ctx.fillText("x", px + halfCellWidth, py + halfCellHeight);
 		}
 		else if(grid[i].currentState == 'visible'){ // display number of mines in neighbouring cells
 			ctx.fillStyle = "#ff0000";
@@ -283,14 +284,16 @@ function drawPlaying(){
 				ctx.fillText(grid[i].numMines, px + halfCellWidth, py + halfCellHeight);
 			}
 		}
-		else{ // display flag
-			ctx.fillStyle = "#cccccc";
-			// ctx.shadowBlur = 0;
-			ctx.fillRect(px, py, gameState.cellWidth, gameState.cellHeight);
-			ctx.strokeRect(px, py, gameState.cellWidth, gameState.cellHeight);
-			if(grid[i].currentState == 'flagged'){
-				ctx.fillStyle = "#0000cc";
-				ctx.fillText("F", px + halfCellWidth, py + halfCellHeight);
+		else{ 
+			ctx.drawImage(cell, px, py, 20, 20);
+			// ctx.fillStyle = "#cccccc";
+			// // ctx.shadowBlur = 0;
+			// ctx.fillRect(px, py, gameState.cellWidth, gameState.cellHeight);
+			// ctx.strokeRect(px, py, gameState.cellWidth, gameState.cellHeight);
+			if(grid[i].currentState == 'flagged'){ // display flag
+				ctx.drawImage(flag, px, py, 20, 20); 
+				// ctx.fillStyle = "#0000cc";
+				// ctx.fillText("F", px + halfCellWidth, py + halfCellHeight);
 			}
 		}
 	}

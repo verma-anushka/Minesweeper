@@ -10,6 +10,19 @@ var currentSecond = 0, frameCount = 0, framesLastSecond = 0; // frame rate
 var offsetX = 0, offsetY = 0; // top left position of game board
 var grid = []; // number of cells in the game board
 
+// Load Images
+var mine = new Image(); // mine image
+mine.src = 'images/mine.jpg'; 
+
+var flag = new Image(); // flag image
+flag.src = 'images/flag.jpg';
+
+var cell = new Image(); // tile image
+cell.src = 'images/cell.jpg';
+
+var clock = new Image(); // clock image
+clock.src = 'images/clock.jpg';
+
 var mouseState = {
 	x: 0, y: 0, // current cursor position
 	click: null // coordinates of the last click 
@@ -56,11 +69,5 @@ var levels = {
 };
 
 var currentLevel = levels[gameState.level];
-console.log(currentLevel.numCols);
-console.log(gameState.cellWidth);
-
 canvas.width = currentLevel.numCols*gameState.cellWidth + 100;
 canvas.height = currentLevel.numRows*gameState.cellHeight + 100;
-
-
-console.log(canvas.width);

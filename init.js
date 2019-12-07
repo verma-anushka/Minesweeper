@@ -12,7 +12,7 @@ var grid = []; // number of cells in the game board
 
 // Load Images
 var mine = new Image(); // mine image
-mine.src = 'images/mine.jpg'; 
+mine.src = 'images/mine.png'; 
 
 var flag = new Image(); // flag image
 flag.src = 'images/flag.jpg';

@@ -155,11 +155,17 @@ function drawMenu(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	canvas.style.opacity = "1";
 
+	ctx.textAlign = "center";
+	ctx.textBaseline = "bottom";
+	ctx.fillStyle = "#FFFFFF";
+	ctx.font = "18px sans-serif";
+	ctx.fillText("Choose a difficulty level", canvas.width/2, 20);
+
 	ctx.textAlign = 'center';
 	ctx.font = "bold 24pt sans-serif";
 	ctx.fillStyle = "#FFF";
 	
-	var y = canvas.height/3 - 25;
+	var y = canvas.height/3 ;
 
 	for(var d in levels){
 
@@ -239,19 +245,23 @@ function drawPlaying(){
 		var py = offsetY + (grid[i].y * gameState.cellHeight);
 		
 		if(gameState.screen == 'lost' && grid[i].hasMine){ // display mine
-			ctx.drawImage(mine, px + 1, py + 1, gameState.cellWidth - 2, gameState.cellHeight - 2); 
-		}
-		else if(grid[i].currentState == 'visible'){ // display number of mines in neighbouring cells
-
-			// console.log(grid[i].colorMines);
 			ctx.beginPath();
 			ctx.rect(px, py, gameState.cellWidth, gameState.cellHeight);
 			ctx.fillStyle = '#DDD';
-			// ctx.shadowColor = '#999';
+			ctx.fill();
+			ctx.drawImage(mine, px + 1, py + 1, gameState.cellWidth - 2, gameState.cellHeight - 2); 
+			ctx.closePath();
+		}
+		else if(grid[i].currentState == 'visible'){ // display number of mines in neighbouring cells
+
+			ctx.beginPath();
+			ctx.rect(px, py, gameState.cellWidth, gameState.cellHeight);
+			ctx.fillStyle = '#DDD';
 			ctx.fill();
 			ctx.strokeStyle = "#999";
 			ctx.strokeRect(px, py, gameState.cellWidth, gameState.cellHeight);
 			ctx.closePath();
+
 			if(grid[i].numMines){
 				ctx.font = "bold 18px monospace";
 				ctx.fillStyle = grid[i].getMinesColor(grid[i].numMines);
@@ -267,7 +277,8 @@ function drawPlaying(){
 	}
 
 	if(gameState.screen == 'lost' || gameState.screen == 'won'){ // display game over message
-
+		
+		ctx.beginPath();
 		ctx.rect(offsetX, offsetY, (currentLevel.numCols * gameState.cellWidth), (currentLevel.numRows * gameState.cellHeight));
 		ctx.fillStyle = 'rgba(255,255,255,0.3)';
 		ctx.fill();
@@ -275,6 +286,8 @@ function drawPlaying(){
 		ctx.fillStyle = '#000';
 		ctx.font = "bold 48px sans-serif";
 		ctx.fillText( (gameState.screen == 'lost' ? "Game Over!" : "Cleared!"), canvas.width/2, canvas.height/2 );
+		ctx.closePath();
+
 	}
 }
 

@@ -6,16 +6,86 @@ html{
 body{
     margin: 0;
     padding: 0;
-    /* height: 100%;
-    width: 100%; */
+    text-align: center;
     background: url("./images/bg.jpg");/* linear-gradient(rgba(0, 0, 0, 0.45), rgba(0,0,0,.45)), */
     background-repeat: no-repeat;
     background-size: cover;
 }
 
+.minesweeper {
+    position: relative;
+    margin: auto;
+    height: 1em;
+    color: transparent;
+    font-family: 'Cambay', sans-serif;
+    font-size: 5vw;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.03em;
+    margin-top: 5%;
+}
+  
+.minesweeper > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: #FFF;
+    pointer-events: none;
+}
+  
+  .minesweeper > div:nth-child(1) {
+    -webkit-mask-image: linear-gradient(black 25%, transparent 25%);
+    mask-image: linear-gradient(black 25%, transparent 25%);
+    /* animation: minesweeper1 5s; */
+  }
+  
+.minesweeper > div:nth-child(2) {
+    -webkit-mask-image: linear-gradient(transparent 25%, black 25%, black 50%, transparent 50%);
+    mask-image: linear-gradient(transparent 25%, black 25%, black 50%, transparent 50%);
+    animation: minesweeper 5s;
+}
+  
+.minesweeper > div:nth-child(3) {
+    -webkit-mask-image: linear-gradient(transparent 50%, black 50%, black 75%, transparent 75%);
+    mask-image: linear-gradient(transparent 50%, black 50%, black 75%, transparent 75%);
+    /* animation: minesweeper3 5s; */
+}
+  
+.minesweeper > div:nth-child(4) {
+     -webkit-mask-image: linear-gradient(transparent 75%, black 75%);
+    mask-image: linear-gradient(transparent 75%, black 75%);
+    /* animation: minesweeper4 5s; */
+}
+
+@keyframes minesweeper {
+    0% {
+      transform: translateX(100%);
+    }
+    24% {
+      transform: translateX(0.5%);
+    }
+    82% {
+      transform: translateX(-0.2%);
+    }
+}
+
+/* .jump {
+    margin-top: 2%;
+    margin-left: 10%;
+    transform-origin: 50% 50%;
+    animation: jump .5s linear alternate infinite;
+}
+
+@keyframes jump {
+    0%   {transform: translate3d(0,0,0) scale3d(1,1,1);}
+    40%  {transform: translate3d(0,30%,0) scale3d(.7,1.5,1);}
+    100% {transform: translate3d(0,100%,0) scale3d(1.5,.7,1);}
+} */
+
 canvas{
     display: block;
     margin: 0 auto;
-    margin-top: 15%;
+    margin-top: 5%;
 }
-

@@ -26,9 +26,11 @@ function startLevel(level){
     gameState.newBest       = false;
 	gameState.timeTaken     = 0;
     gameState.level	        = level;
-	gameState.screen	    = 'playing';	
+	gameState.screen	    = 'playing';
 
 	var currentLevel = levels[level];																	// chosen difficulty level
+	minesLeft				= currentLevel.mines;	
+
     canvas.width = currentLevel.numCols*gameState.cellWidth + 100;										// update canvas width
 	canvas.height = currentLevel.numRows*gameState.cellHeight + 100;									// update canvas height
 
@@ -186,8 +188,16 @@ function drawPlaying(){
 		ctx.fill();
 		ctx.fillStyle = '#000';
 		ctx.textAlign = "left";
+		// for(var i in grid){
+		// 	if(grid[i].currentState == 'flagged') { 											
+		// 		console.log(grid[i]);
+		// 		minesLeft -= 1;
+		// 		break;
+		// 	}
+		// 	ctx.fillText(minesLeft, 80, 45);														// display total number of mines
+		// }
 		ctx.drawImage(mine, 55, 25, 20, 20); 													// display mine image
-		ctx.fillText(currentLevel.mines, 80, 45);												// display total number of mines
+		ctx.fillText(minesLeft, 80, 45);														// display total number of mines
 		ctx.closePath();
 	
 		var whichT = (gameState.screen == 'won' ? gameState.timeTaken : time);					// update time
@@ -254,7 +264,9 @@ function drawPlaying(){
 		else{ 
 			ctx.drawImage(cell, px, py, 20, 20); 												// display cell
 			if(grid[i].currentState == 'flagged') { 											// display flag
+				// minesLeft -= 1;
 				ctx.drawImage(flag, px, py, gameState.cellWidth, gameState.cellHeight); 
+				// break;
 			}
 		}
 	}
@@ -265,7 +277,23 @@ function drawPlaying(){
 		ctx.textAlign = "center";
 		ctx.fillStyle = '#000';
 		ctx.font = "bold 48px sans-serif";
-		ctx.fillText( (gameState.screen == 'lost' ? "Game Over!" : "Cleared!"), canvas.width/2, canvas.height/2 );
+		if(gameState.screen == 'lost'){
+			ctx.fillText( "Game Over!", canvas.width/2, canvas.height/2 );
+		}else if(gameState.screen == 'won'){
+
+			for(var i in grid){ 																// iterate over all the cells in the grid array
+
+				var px = offsetX + (grid[i].x * gameState.cellWidth);							// x coordinate of the cell
+				var py = offsetY + (grid[i].y * gameState.cellHeight);							// y coordinate of the cell
+
+				if(grid[i].hasMine == true && grid[i].currentState != 'visible') {
+					ctx.drawImage(flag, px, py, gameState.cellWidth, gameState.cellHeight); 
+				}
+			}
+			ctx.fillText( "Cleared!", canvas.width/2, canvas.height/2 );
+
+		}
+		// ctx.fillText( (gameState.screen == 'lost' ? "Game Over!" : "Cleared!"), canvas.width/2, canvas.height/2 );
 		ctx.closePath();
 
 	}

@@ -9,6 +9,7 @@ var currentSecond = 0, frameCount = 0, framesLastSecond = 0; 	// frame rate
 
 var offsetX = 0, offsetY = 0; 									// top left position of game board
 var grid = []; 													// number of cells in the game board
+var minesLeft;
 
 // Load Images
 var mine = new Image(); 										// mine image
